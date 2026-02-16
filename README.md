@@ -17,3 +17,9 @@
 - API Gateway 연결: POST /shorten
 - 리다이렉트용 Lambda: GET /{code} -> 302
 - 프론트에서 QR 생성
+
+## Runbook (문제 생기면)
+1) Lambda 로그: CloudWatch Logs 확인
+2) DynamoDB에 code가 저장/조회되는지 확인
+3) 권한 에러면 IAM Role 정책 확인
+4) 5xx 늘면 API Gateway/Lambda 에러율 알람 설정
