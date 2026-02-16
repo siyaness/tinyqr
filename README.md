@@ -32,3 +32,6 @@
 - Runtime: Python 3.14 / Architecture: x86_64
 - Handler: lambda_function.lambda_handler
 - CORS headers added: Access-Control-Allow-Origin, Allow-Headers, Allow-Methods
+
+## Evidence
+![Lambda test success](docs/lambda-test-success.png)
