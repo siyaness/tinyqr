@@ -8,6 +8,14 @@ table = dynamodb.Table(TABLE_NAME)
 
 ALPHABET = string.ascii_letters + string.digits
 
+# 추가: API 응답 헤더(나중에 브라우저/프론트 연동할 때 필요)
+DEFAULT_HEADERS = {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "OPTIONS,POST"
+}
+
 def gen_code(length=6):
     return "".join(secrets.choice(ALPHABET) for _ in range(length))
 
@@ -23,10 +31,18 @@ def lambda_handler(event, context):
 
         url = data.get("url") or data.get("longUrl")
         if not url or not isinstance(url, str):
-            return {"statusCode": 400, "body": json.dumps({"error": "url is required"})}
+            return {
+                "statusCode": 400,
+                "headers": DEFAULT_HEADERS,
+                "body": json.dumps({"error": "url is required"})
+            }
 
         if not (url.startswith("http://") or url.startswith("https://")):
-            return {"statusCode": 400, "body": json.dumps({"error": "url must start with http:// or https://"})}
+            return {
+                "statusCode": 400,
+                "headers": DEFAULT_HEADERS,
+                "body": json.dumps({"error": "url must start with http:// or https://"})
+            }
 
         ttl_days = int(data.get("ttlDays", 30))
         ttl_days = max(1, min(ttl_days, 365))
@@ -56,9 +72,21 @@ def lambda_handler(event, context):
                 raise
 
         if not code:
-            return {"statusCode": 500, "body": json.dumps({"error": "failed to allocate code"})}
+            return {
+                "statusCode": 500,
+                "headers": DEFAULT_HEADERS,
+                "body": json.dumps({"error": "failed to allocate code"})
+            }
 
-        return {"statusCode": 200, "body": json.dumps({"code": code, "url": url, "expiresAt": expires_at})}
+        return {
+            "statusCode": 200,
+            "headers": DEFAULT_HEADERS,
+            "body": json.dumps({"code": code, "url": url, "expiresAt": expires_at})
+        }
 
     except Exception as e:
-        return {"statusCode": 500, "body": json.dumps({"error": "internal_error", "detail": str(e)})}
+        return {
+            "statusCode": 500,
+            "headers": DEFAULT_HEADERS,
+            "body": json.dumps({"error": "internal_error", "detail": str(e)})
+        }
