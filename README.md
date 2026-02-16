@@ -27,3 +27,8 @@
 ## API Spec (planned)
 - POST /shorten  -> { url } 를 받아 { code } 반환
 - GET  /{code}   -> 원본 url로 302 Redirect
+
+## Implementation Notes
+- Runtime: Python 3.14 / Architecture: x86_64
+- Handler: lambda_function.lambda_handler
+- CORS headers added: Access-Control-Allow-Origin, Allow-Headers, Allow-Methods
