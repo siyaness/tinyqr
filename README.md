@@ -23,3 +23,7 @@
 2) DynamoDB에 code가 저장/조회되는지 확인
 3) 권한 에러면 IAM Role 정책 확인
 4) 5xx 늘면 API Gateway/Lambda 에러율 알람 설정
+
+## API Spec (planned)
+- POST /shorten  -> { url } 를 받아 { code } 반환
+- GET  /{code}   -> 원본 url로 302 Redirect
